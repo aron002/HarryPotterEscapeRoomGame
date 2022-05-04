@@ -34,7 +34,7 @@ def create_spells():
     return spells
 
 
-def create_half_blood_spells(): # TODO
+def create_half_blood_spells():
     spells = []
     spells.append(Spell('Avada Kedavra', [(1,4), (4,2), (2,3), (3,5)], 'green'))
     spells.append(Spell('Expelliarmus', [(0,3), (3,4), (4,5), (5,2), (2,1), (1,0)], 'red'))
@@ -61,9 +61,7 @@ def create_wands():
     wands = {}
     wand_names = ['dynol', 'forma', 'lingua', 'kyden']
     for wand_name in wand_names:
-        # wand = resource_path('assets/' + wand_name + '.png')
         wand = pygame.image.load('assets/' + wand_name + '.png')
-        # wand = pygame.image.load(wand)
         wand = pygame.transform.scale(wand, (POINTER_SIZE, POINTER_SIZE))
         wands[wand_name[0].upper()+wand_name[1:]] = wand
     return wands
@@ -72,25 +70,15 @@ def create_wands():
 def create_icons():
     icons = {}
     text_names = ['dynol', 'forma', 'lingua', 'kyden', 'clear', 'select', 'start']
-    # clear = pygame.image.load('assets/clear.png')
-    # icons['Clear'] = clear
-    # avada_kedavra = pygame.image.load('assets/avada_kedavra.png')
-    # icons['Avada Kedavra'] = avada_kedavra
     for spell in SPELLS:
         name = spell.name.replace(' ', '_').lower()
-        # spell_img = resource_path('assets/' + name + '.png')
         spell_img = pygame.image.load('assets/' + name + '.png')
-        # spell_img = pygame.image.load(spell_img)
         icons[spell.name] = spell_img
     for text_name in text_names:
-        # text_img = resource_path('assets/' + text_name + '_text.png')
         text_img = pygame.image.load('assets/' + text_name + '_text.png')
-        # text_img = pygame.image.load(text_img)
         icons[text_name[0].upper() + text_name[1:]+'_text'] = text_img
         if not text_name in ['clear', 'select', 'start']:
-            # icon_img = resource_path('assets/' + text_name + '_icon.png')
             icon_img = pygame.image.load('assets/' + text_name + '_icon.png')
-            # icon_img = pygame.image.load(icon_img)
             icon_img = pygame.transform.scale(icon_img, (WAND_BOX, WAND_BOX))
             icons[text_name[0].upper() + text_name[1:]+'_icon'] = icon_img
     return icons
@@ -99,12 +87,10 @@ def create_icons():
 def create_centers():
     centers = []
     for j in range(3):
-        # center = (OFFSET_X, j*((HEIGHT-2*OFFSET_Y)//2)+OFFSET_Y)
         center = (OFFSET_X, j*((HEIGHT-OFFSET_Y)//2)+OFFSET_Y)
         centers.append(center)
 
     for j in range(3):
-        # center = (WIDTH-OFFSET_X, j*((HEIGHT-2*OFFSET_Y)//2)+OFFSET_Y)
         center = (WIDTH-OFFSET_X, j*((HEIGHT-OFFSET_Y)//2)+OFFSET_Y)
         centers.append(center)
     return centers
@@ -128,10 +114,6 @@ def draw_lines(lines):
 def draw_dashboard():
     # draw clear box
     box = pygame.draw.rect(gameDisplay, COLORS['black'], (WIDTH-(BOX_WIDTH//2 + BOX_WIDTH), HEIGHT+(EXTRA_HEIGHT-BOX_HEIGHT)//2, BOX_WIDTH, BOX_HEIGHT), width = 2)
-    # text = FONT.render('CLEAR', True, COLORS['black'])
-    # textRect = text.get_rect()
-    # textRect.center = box.center
-    # gameDisplay.blit(text, textRect)
     clear = ICONS['Clear_text']
     clear_rect = clear.get_rect()
     clear_rect.center = box.center
@@ -146,8 +128,6 @@ def draw_dashboard():
 
 
 def draw_spell_name(spell):
-    # name = 'Malzahar used: ' + spell.name
-    # text = FONT.render(name, True, COLORS['black'])
     text = ICONS[spell.name]
     textRect = text.get_rect()
     textRect.center = (WIDTH//2, 50)
@@ -237,7 +217,6 @@ def draw_submit(wand):
 
 
 def calc_circle(pos):
-    # find the circle
     x, y = pos
     for i in range(len(CENTERS)):
         circle_x, circle_y = CENTERS[i]
@@ -262,16 +241,12 @@ def check_buttons(pos):
 
 def check_wands(pos):
     x, y = pos
-    # (gameDisplay, COLORS['black'], (OFFSET_X+10, OFFSET_Y+textRect.height, WAND_BOX, WAND_BOX), width = 2)
     if OFFSET_X+10 <= x <= OFFSET_X+10+WAND_BOX and OFFSET_Y+33 <= y <= OFFSET_Y+33+WAND_BOX:
         return 'Lingua'
-    # (gameDisplay, COLORS['black'], (WIDTH-(OFFSET_X+WAND_BOX)+10, OFFSET_Y+textRect.height+3, WAND_BOX, WAND_BOX), width = 2)
     if WIDTH-(OFFSET_X+WAND_BOX)+10 <= x <= WIDTH-(OFFSET_X+WAND_BOX)+10+WAND_BOX and OFFSET_Y+36 <= y <= OFFSET_Y+36+WAND_BOX:
         return 'Dynol'
-    # (gameDisplay, COLORS['black'], (OFFSET_X+10, HEIGHT-OFFSET_Y+textRect.height-5, WAND_BOX, WAND_BOX), width = 2)
     if OFFSET_X+10 <= x <= OFFSET_X+10+WAND_BOX and HEIGHT-OFFSET_Y+28 <= y <= HEIGHT-OFFSET_Y+28+WAND_BOX:
         return 'Forma'
-    # (gameDisplay, COLORS['black'], (WIDTH-(OFFSET_X+WAND_BOX)+10, HEIGHT-OFFSET_Y+textRect.height+2, WAND_BOX, WAND_BOX), width = 2)
     if WIDTH-(OFFSET_X+WAND_BOX)+10 <= x <= WIDTH-(OFFSET_X+WAND_BOX)+10+WAND_BOX and HEIGHT-OFFSET_Y+35 <= y <= HEIGHT-OFFSET_Y+35+WAND_BOX:
         return 'Kyden'
     return ''
@@ -287,20 +262,15 @@ def compare_lines(l1, l2):
 
 
 def draw():
-    # stop = False
     selected = None
     lines = []
     color = None
     clock = pygame.time.Clock()
-    # used_spell = random.choice(SPELLS)
-    # used_spell = SPELLS_DICT['Avada Kedavra']
-    # spell = SPELLS_DICT[COUNTERS[used_spell.name]]
     used_spell = None
     spell = None
     score = 0
     wand = None # default doesnt matter
     screen = 'main'
-    # while not stop:
     while True:
         gameDisplay.fill(COLORS['white'])
         pos = pygame.mouse.get_pos()
@@ -308,13 +278,11 @@ def draw():
             pygame.mouse.set_visible(True)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    # stop = True
                     return score
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     wnd = check_wands(pos)
                     if wnd != '':
                         wand = WANDS[wnd]
-                    # (WIDTH//2-imgRect.width//2-SUBMIT_OFFSET, HEIGHT+EXTRA_HEIGHT//2-imgRect.height//2-SUBMIT_OFFSET, imgRect.width+2*SUBMIT_OFFSET, imgRect.height+2*SUBMIT_OFFSET)
                     elif wand and WIDTH//2-29-SUBMIT_OFFSET <= pos[0] <= WIDTH//2-29-SUBMIT_OFFSET+WIDTH//2-58-SUBMIT_OFFSET and HEIGHT+EXTRA_HEIGHT//2-16-SUBMIT_OFFSET <= pos[1] <= HEIGHT+EXTRA_HEIGHT//2-16-SUBMIT_OFFSET+33+2*SUBMIT_OFFSET:# when they click submit
                         screen = 'game'
                         start = pygame.time.get_ticks()
@@ -330,7 +298,6 @@ def draw():
             pygame.mouse.set_visible(False)
             seconds = (pygame.time.get_ticks() - start) / 1000
             if seconds >= MAX_TIME:
-                # stop = True
                 return score
             if compare_lines(lines, spell.lines):
                 if wand == WANDS['Dynol']:
@@ -348,11 +315,9 @@ def draw():
                         spell = SPELLS_DICT[COUNTERS[used_spell.name]]
                     lines = []
                 else:
-                    # stop = True
                     return score
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    # stop = True
                     return score
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     btn = check_buttons(pos)
@@ -363,19 +328,8 @@ def draw():
                         color = COLORS[btn]
                     else:
                         if color:
-                            # if selected is not None:
-                            #     # if a line has been started
-                            #     new_selected = calc_circle(pos)
-                            #     if new_selected is not None:
-                            #         if new_selected != selected:
-                            #             new_line = Line(CENTERS[selected], CENTERS[new_selected], color)
-                            #             lines.append(new_line)
-                            #             selected = None
-                            # else:
-                                # create new line from selected to mouse
-                            selected = calc_circle(pos) # in else
+                            selected = calc_circle(pos)
                 if event.type == pygame.MOUSEBUTTONUP:
-                    # if a line has been started
                     new_selected = calc_circle(pos)
                     if color and selected is not None and new_selected is not None and new_selected != selected:
                         new_line = Line(CENTERS[selected], CENTERS[new_selected], color)
@@ -424,7 +378,7 @@ if __name__ == '__main__':
     gameDisplay = pygame.display.set_mode(RESOLUTION)
     pygame.display.set_caption('Wand Duel')
     FONT = pygame.font.Font('freesansbold.ttf', 24)
-    # TODO: Winner/Loser Screen
+    # TODO: Winner/Loser Screen with next hint
     if draw() == SCORE_NEEDED:
         print('YOU WON!!!')
     else:
